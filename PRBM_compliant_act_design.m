@@ -1,0 +1,50 @@
+E = 215e9;%69e9;
+density = 8050;%2700;
+L_lim = 80e-3;
+d = 10e-3;
+stack_number = 1;
+F_p_max = 800;
+d_p_max = stack_number*(2.e-6);
+
+t_1 = 1.28e-3;%0.75e-3;
+d_1 = 25.4e-3;%0.75e-3;
+effortarm =(t_1/2)+1.25e-3;%0.75e-3; 
+l_1 =3.33e-3;% 2.5e-3;
+
+syms l t d theta effort_arm real
+
+obj = theta;
+
+m = density*l*t*d;
+I_l = (1/12)*m*(4*l^2+t^2);
+
+moment_load = F_p_max*effort_arm;
+
+K = (E*I_l)/l;
+m_j = tan(theta);
+m_p = -1/m_j;
+y_je = (l/2)*sin(theta);
+x_je= (l/2)*cos(theta);
+c = y_je-m_p*x_je;
+x = (l/2);%+d_p_max
+y = m_p*x+c;
+theta1 = atan(d_p_max/(effort_arm+y));
+a = subs(theta1,[l,d,t,effort_arm],[l_1,d_1,t_1,effortarm]);
+the = solve(a-theta);
+theta2= moment_load/K;
+the2 = subs(theta2,[l,d,t,effort_arm],[l_1,d_1,t_1,effortarm]);
+the_min = min(double(the),double(the2))
+Moment_act = K*the_min;
+Momentact = subs(Moment_act,[l,d,t,effort_arm],[l_1,d_1,t_1,effortarm]);
+sig_max = Momentact*(t/2)/I_l;
+sig = subs(sig_max,[l,d,t,effort_arm],[l_1,d_1,t_1,effortarm]);
+double(the)
+double(the2)
+sig_AL = 5.5e7%7e3;%276e6;
+double(sig)
+sig_AL/double(sig)
+
+double(the*25.4e-3)
+
+stiffness = subs(K,[l,d,t,effort_arm],[l_1,d_1,t_1,effortarm]);
+
