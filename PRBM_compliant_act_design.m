@@ -16,7 +16,7 @@ syms l t d theta effort_arm real
 obj = theta;
 
 m = density*l*t*d;
-I_l = (1/12)*m*(4*l^2+t^2);
+I_l = (1/12)*(d^3*t^2);% aera moment not moment of Inertia (1/12)*m*(4*l^2+t^2);  
 
 moment_load = F_p_max*effort_arm;
 
